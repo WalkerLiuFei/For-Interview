@@ -1,4 +1,4 @@
-Redis设计与实现阅读笔记（一）
+Redis内部数据结构
 
 ## 字符串
 
@@ -193,6 +193,19 @@ typedef struct dictEntry {
 
 ### Rehash 
 
+Rehash 的过程 ： 
+
+1. 创建一个比 `ht[0]->table` 更大的 `ht[1]->table` ；
+2. 将 `ht[0]->table` 中的所有键值对迁移到 `ht[1]->table` ；
+3. 将原有 `ht[0]` 的数据清空，并将 `ht[1]` 替换为新的 `ht[0]` ；
+4. 新建一个新的Hash表，替换原来的ht[1]
+
+Rehash 的特点
+
+1. Rehash 是分多次，渐进式的，因为Rehash时会将hashtable加锁
+
+
+
 Rehash的实质是对HashMap 进行扩容
 
 1. 触发条件 ：
@@ -214,5 +227,55 @@ Rehash的实质是对HashMap 进行扩容
 
 
 
+## 跳跃表
 
+跳跃表在Redis中 用作有序列表的实现
+
+### 数据结构
+
+
+
+```c
+typedef struct zskiplist {
+
+    // 头节点，尾节点
+    struct zskiplistNode *header, *tail;
+
+    // 节点数量
+    unsigned long length;
+
+    // 目前表内节点的最大层数
+    int level;
+
+} zskiplist;
+
+```
+
+
+
+```c
+typedef struct zskiplistNode {
+
+    // member 对象
+    robj *obj;
+
+    // 分值
+    double score;
+
+    // 后退指针
+    struct zskiplistNode *backward;
+
+    // 层
+    struct zskiplistLevel {
+
+        // 前进指针
+        struct zskiplistNode *forward;
+
+        // 这个层跨越的节点数量
+        unsigned int span;
+
+    } level[];
+
+} zskiplistNode;
+```
 
