@@ -3,24 +3,38 @@
 
 
 **一、Java基础和高级**
-1.String类为什么是final的。
-2.HashMap的源码，实现原理，底层结构。
-3.反射中，Class.forName和classloader的区别
-4.session和cookie的区别和联系，session的生命周期，多个服务部署时session管理。
-5.Java中的队列都有哪些，有什么区别。
-6.Java的内存模型以及GC算法
-7.Java7、Java8的新特性
-8.Java数组和链表两种结构的操作效率，在哪些情况下(从开头开始，从结尾开始，从中间开始)，哪些操作(插入，查找，删除)的效率高
-9.Java内存泄露的问题调查定位：jmap，jstack的使用等等
-**二、spring框架**
 
-1. spring框架中需要引用哪些jar包，以及这些jar包的用途
-2. srpingMVC的原理
-3. springMVC注解的意思
-4. spring中beanFactory和ApplicationContext的联系和区别
-5. spring注入的几种方式
-6. spring如何实现事物管理的
-7. springIOC和AOP的原理
+1. **String类为什么是final的**
+
+   + String 的不可变性来支持字符串常量池。
+   + 在并发场景下，多个线程同时写一个资源时会产生竞态，
+   + String 不可继承
+   + String 
+
+
+2. HashMap的源码，实现原理，底层结构。
+3. 反射中，Class.forName和classloader的区别
+   + class.forName()前者除了将类的.class文件加载到jvm中之外，还会对类进行解释，执行类中的static块。
+     而classLoader只干一件事情，就是将.class文件加载到jvm中，不会执行static中的内容,只有在newInstance才会去执行static块。Class.forName(name, initialize, loader)带参函数也可控制是否加载static块。并且只有调用了newInstance()方法采用调用构造函数，创建类的对
+
+4. session和cookie的区别和联系，session的生命周期，多个服务部署时session管理。
+5. Java中的队列都有哪些，有什么区别。
+6. Java的内存模型以及GC算法
+7. Java7、Java8的新特性
+8. Java数组和链表两种结构的操作效率，在哪些情况下(从开头开始，从结尾开始，从中间开始)，哪些操作(插入，查找，删除)的效率高
+9. Java内存泄露的问题调查定位：jmap，jstack的使用等等
+
+
+
+## Spring 框架
+
+1.  spring框架中需要引用哪些jar包，以及这些jar包的用途
+2.  srpingMVC的原理
+3.  springMVC注解的意思
+4.  spring中beanFactory和ApplicationContext的联系和区别
+5.  spring注入的几种方式
+6.  spring如何实现事物管理的
+7.  springIOC和AOP的原理
 8. spring中循环注入的方式
 9. Spring AOP与IOC的实现原理
 10. Spring的beanFactory和factoryBean的区别
