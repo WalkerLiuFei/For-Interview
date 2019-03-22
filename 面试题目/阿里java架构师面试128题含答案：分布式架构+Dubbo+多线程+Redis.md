@@ -12,19 +12,38 @@
    + String 
 
 
-2. HashMap的源码，实现原理，底层结构。
-3. 反射中，Class.forName和classloader的区别
+2. **HashMap的源码，实现原理，底层结构。**
+
+   + HashMap 的底层数据结构是Hash 表
+   + 是线程不安全的，相对而言线程安全的是HashTable和ConcurrentHashMap （分段锁）
+   + 通过LinkList 来解决Hash冲突，像Redis的Map一样
+
+3. **反射中，Class.forName和classloader的区别** 
+
    + class.forName()前者除了将类的.class文件加载到jvm中之外，还会对类进行解释，执行类中的static块。
      而classLoader只干一件事情，就是将.class文件加载到jvm中，不会执行static中的内容,只有在newInstance才会去执行static块。Class.forName(name, initialize, loader)带参函数也可控制是否加载static块。并且只有调用了newInstance()方法采用调用构造函数，创建类的对
+   + 也就就是说ClassLoader的加载少了 类加载过程的 loading --> linking ---> Initializtion 中的 Initializtion.
 
-4. session和cookie的区别和联系，session的生命周期，多个服务部署时session管理。
-5. Java中的队列都有哪些，有什么区别。
-6. Java的内存模型以及GC算法
-7. Java7、Java8的新特性
-8. Java数组和链表两种结构的操作效率，在哪些情况下(从开头开始，从结尾开始，从中间开始)，哪些操作(插入，查找，删除)的效率高
-9. Java内存泄露的问题调查定位：jmap，jstack的使用等等
+4. **Java 类加载过程中的 加载，连接，初始化分别作了什么 ？** 
 
+5. **热部署的原理** 
 
+   + 自定义Classloader
+   + 热部署满足的条件，需要
+
+   + 
+
+6. 类加载机制 ： 参考 ： https://www.cnblogs.com/aspirant/p/7200523.html
+7. **并发编程中的伪共享问题**
+   1. 
+8. Java7、Java8的新特性
+9. Java数组和链表两种结构的操作效率，在哪些情况下(从开头开始，从结尾开始，从中间开始)，哪些操作(插入，查找，删除)的效率高
+10. Java内存泄露的问题调查定位：jmap，jstack的使用等等
+11. **并发编程中数据安全的三个必备条件** 
+    1. 原子性 ： 是指在一个操作中就是cpu不可以在中途暂停然后再调度，既不被中断操作，要不执行完成，要不就不执行。
+    2. 可见性 ： 是指当多个线程访问同一个变量时，一个线程修改了这个变量的值，其他线程能够立即看得到修改的值。
+    3. 有序性 : 即程序执行的顺序按照代码的先后顺序执行
+12. 
 
 ## Spring 框架
 
