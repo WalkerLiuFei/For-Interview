@@ -15,3 +15,23 @@
 13. **缓存表和汇总表带来的性能提升？**
 14. **什么是计数器表？业务场景是什么?**
 
+
+
+## 答案
+
+1. 省略
+
+2. 列值最好不要为Null的原因包括 ： 
+   1.  空值是不占空间的，而`null`值 是占空间的 （一个 bit的空间）！
+   2.  B-tree 索引不会存储NULL 值，所以如果索引的字段可以为 null的话，索引的效率就会降低
+   3.  如果有 Null column 存在的情况下，count(Null column)需要格外注意，``null` `值不会参与统计 
+   4.  对于null 列的筛选， `<> ` 满足不了所有的筛选条件
+3. Timestamp 只需要4个字节，Datetime需要8个字节。 但是后者可以表示的时间范围更广。Timestamp 不用担心时区问题。显示问题，datetime 的前端显示更为友好
+4. 省略
+5. The `x` in `INT(x)` has nothing to do with space requirements or any other performance issues, it's really just the *display width*. Generally setting the display widths to a reasonable value is mostly useful with the `UNSIGNED ZEROFILL` option.
+6. Decimal 实际是以字符串的形式存放的
+7. varchar和 char 类型的可变长度字符串，其需要多余的字节来记录长度
+8. BOLB 和 TEXT 都是以标识额外存储文件路径的方式来记录数据的
+   1. BLOB 和 TEXT 列都不能有默认值
+   2. 对于BLOB和TEXT列的索引，必须指定索引前缀的长度
+9. 标识列最好选择int类型，其次是字符串，
