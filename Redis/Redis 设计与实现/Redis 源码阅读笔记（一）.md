@@ -24,13 +24,16 @@ struct sdshdr {
 
 ### SDS 的特性
 
-1. 二进制安全
-2. 获取字符串长度 的时间复杂度为 O(1)
-3. 内存开销小，对于经常变化的字符串，有预分配的策略
+1. 二进制安全 ： C字符串的数据肯定满足某种编码的，而SDS不需要。
+2. 获取字符串长度 的时间复杂度为 O(1)，因为有一个专门的记录长度的属性，如果使用使用原始的`C`字符串，计算长度的复杂度为`O(N)`。
+3. 避免缓存区溢出 ： 比如两个字符串相 concat，C字符串如果目标字符串没有提前分配足够的空间，这个操作就会造成缓冲区溢出，而SDS的API封装了这些检查和分配策略。
+4. 内存开销小，对于经常变化的字符串，有预分配的策略
    1. < 1MB ，预分配内存大小为需要内存的两倍
    2. /> 1MB , 多分配1MB空间
    3. 预分配的内存，在字符串被删除之前，不会被删除
    4. **这里需要注意的点是，对于经常append 的字符串，需要及时释放多余的预分配内存**
+
+
 
 ## 双端链表
 
@@ -170,8 +173,11 @@ typedef struct dictEntry {
 
     // 值
     union {
+        // 键值可以是一个指针，*val标识
         void *val;
+        // 或是一个uint64_t 的整数
         uint64_t u64;
+        // 或是一个int64_t 的整数
         int64_t s64;
     } v;
 
@@ -183,7 +189,7 @@ typedef struct dictEntry {
 
 ### 细节
 
-1. 通过实现可以了解到，`dictht` [使用链地址法来处理键碰撞](http://en.wikipedia.org/wiki/Hash_table#Separate_chaining)： 当多个不同的键拥有相同的哈希值时，哈希表用一个链表将这些键连接起来。同Java的实现一致![Redis 字典结构](https://redisbook.readthedocs.io/en/latest/_images/graphviz-6989792733a041b23cdc0b8f126434590c50a4e4.svg)
+1. 通过实现可以了解到，`dictht` [使用链地址法来处理键碰撞](http://en.wikipedia.org/wiki/Hash_table#Separate_chaining)： 当多个不同的键拥有相同的哈希值时，哈希表用一个链表将这些键连接起来。**同Java的实现一致** ![Redis 字典结构](https://redisbook.readthedocs.io/en/latest/_images/graphviz-6989792733a041b23cdc0b8f126434590c50a4e4.svg)
 2. Redis 目前使用两种不同的哈希算法，对于使用何种算法，取决于具体处理的数据
    1. MurmurHash2 32 bit 算法
    2. 基于 djb 算法实现的一个大小写无关散列算法：具体信息请参考 <http://www.cse.yorku.ca/~oz/hash.html> 。
@@ -229,11 +235,11 @@ Rehash的实质是对HashMap 进行扩容
 
 ## 跳跃表
 
-跳跃表在Redis中 用作有序列表的实现
+跳跃表在Redis中 用作有序列表的实现。
+
+关于跳跃表这种数据结构 ：[参考](https://lotabout.me/2018/skip-list/) 
 
 ### 数据结构
-
-
 
 ```c
 typedef struct zskiplist {

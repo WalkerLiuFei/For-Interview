@@ -20,7 +20,6 @@
 ## 答案
 
 1. 省略
-
 2. 列值最好不要为Null的原因包括 ： 
    1.  空值是不占空间的，而`null`值 是占空间的 （一个 bit的空间）！
    2.  B-tree 索引不会存储NULL 值，所以如果索引的字段可以为 null的话，索引的效率就会降低
@@ -28,10 +27,24 @@
    4.  对于null 列的筛选， `<> ` 满足不了所有的筛选条件
 3. Timestamp 只需要4个字节，Datetime需要8个字节。 但是后者可以表示的时间范围更广。Timestamp 不用担心时区问题。显示问题，datetime 的前端显示更为友好
 4. 省略
-5. The `x` in `INT(x)` has nothing to do with space requirements or any other performance issues, it's really just the *display width*. Generally setting the display widths to a reasonable value is mostly useful with the `UNSIGNED ZEROFILL` option.
-6. Decimal 实际是以字符串的形式存放的
-7. varchar和 char 类型的可变长度字符串，其需要多余的字节来记录长度
-8. BOLB 和 TEXT 都是以标识额外存储文件路径的方式来记录数据的
+5. The `x` in `INT(x)` has nothing to do with space requirements or any other performance issues, it's really just the *display width*. Generally setting the display widths to a reasonable value is mostly useful with the `UNSIGNED ZEROFILL` option.所以在建表时 指定INT(11) 中操作是没有意义的。
+6. Decimal 实际是以字符串的形式存放的，Decimal 可以指定精度。
+7. varchar和 char 类型的可变长度字符串，其需要多余的字节来记录长度。另外，**varchar会保留末尾空格，而char则不会**
+8. Mysql将 BOLB 和 TEXT作为一个单独的对象进行处理，当他们的太大时， 都是通过以标识额外存储文件路的方式来记录数据的
    1. BLOB 和 TEXT 列都不能有默认值
    2. 对于BLOB和TEXT列的索引，必须指定索引前缀的长度
-9. 标识列最好选择int类型，其次是字符串，
+9. 最好使用整型来作为标识列，因为在上面可以很方便的建立索引，并且可以使用AUTO_INCREMENT。\
+10. 范式化的带来的优势 ：
+   1. 表的业务属性更清晰
+   2. 范式化的更新操作通常比反范式的块
+   3. 当数据较好的范式化，只有少数的重复数据，所以只需要修改更少的数据
+   4. 范式化的表通常更新，更容易放到内存中，所以执行操作比较快
+   5. 很少有多余的数据意味着检索列表数据时更少需要Distinct 或者 Group by语句。
+11. 反范式化带来的优势
+    1. 很好的避免关联查询
+    2. 业务实现更简单
+12. 最好的方式是混用范式化和反范式。
+13. 优化 `ALTER TABLE ` 操作，在进行`ALTER TABLE `操作时，一般会造成表的不可用，
+    1. 主备切换 ： 在备用表上面进行表结构更新，然后将备用表切换成master
+    2. 影子拷贝 ： 用要求的表结构创建一张新表，然后通过重命名和删表的方式进行替换。
+14. 

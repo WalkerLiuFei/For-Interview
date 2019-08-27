@@ -358,3 +358,13 @@ PARTITION BY RANGE( YEAR(joined) ) (
 - 日志类、监控类、统计类数据
 - 非结构化或弱结构化数据
 - 对事务要求不强，且无太多关联操作的数据
+
+## Mysql操作时的时间复杂度
+
+As you don't control the algorithm selected, there is no way to know directly. However, without indexes a SELECT should be O(n) (a table scan has to inspect every record which means it will scale with the size of the table).
+
+With an index a SELECT is probably O(log(n)) (although it would depend on the algorithm used for indexing and the properties of the data itself if that holds true for any real table). To determine your results for any table or query you have to resort to profiling real world data to be sure.
+
+INSERT without indexes should be very quick (close to O(1)) while UPDATE needs to find the records first and so will be slower (slightly) than the SELECT that gets you there.
+
+INSERT with indexes will probably again be in the ballpark of O(log(n^2)) when the index tree needs to be rebalanced, closer to O(log(n)) otherwise. The same slowdown will occur with an UPDATE if it affects indexed rows, on top of the SELECT costs.
