@@ -104,49 +104,73 @@
    5. volatile-random：当内存不足以容纳新写入数据时，在设置了过期时间的键空间中，随机移除某个key。
    6. volatile-ttl：当内存不足以容纳新写入数据时，在设置了过期时间的键空间中，有更早过期时间的key优先移除。
 
-17. Redis事务
+17. redis集群，高可用，原理
 
-18. 缓存穿透的解决办法
+   1. Redis 集群通过哨兵监控 一个 分片 shard 下面一个`master`节点和多个`slave`节点当master节点宕机后，哨兵sential选择一个 slave 作为master
 
-19. redis集群，高可用，原理
-
-20. MYSQL里有2000w数据，redis中只存20w的数据，如何保证redis中的数据都是热点数据
+18. MYSQL里有2000w数据，redis中只存20w的数据，如何保证redis中的数据都是热点数据
 
    14. 限定Redis内存max值即可，Redis有自己的一套淘汰策略
 
-21. 用Redis和任意语言实现一段恶意登录保护的代码，限制1小时内每用户Id最多只能登录5次
+19. 用Redis和任意语言实现一段恶意登录保护的代码，限制1小时内每用户Id最多只能登录5次
 
-22. Redis的数据淘汰策略
+   1. https://github.com/aCoder2013/blog/issues/26
 
-23. Redis 与epoll 多路复用IO
+   2. 注意在 键值过期后再去 INCR
 
-24. Redis的数据结构分析
+   3. 也可以利用 
 
-25. Redis主从复制原理及无磁盘复制分析
+     ```java
+     try (Jedis redis = getRedis()) {
+     	Long count = redis.incrBy(key.getBytes(), val);
+     	if (count == val) {
+     	    redis.expire(key, exp);
+     	}
+     }
+     ```
 
-26. Redis管道模式详解
+     方式进行设置过期时间
 
-27. Redis缓存与数据库一致性问题解决方案
+   ```
+   result = SETNX login_{user-id} 0 3600
+   if result == 0:
+   	return success
+   	
+   ```
 
-28. 基于Redis实现分布式锁实战
+   1. 
 
-29. 图解Redis中的AOF和RDB持久化策略的原理
+20. Redis的数据淘汰策略
 
-30. Redis读写分离架构实践
+21. Redis 与epoll 多路复用IO
 
-31. Redis哨兵架构及数据丢失问题分析
+22. Redis的数据结构分析
 
-32. Redis  luster数据分布算法之 Hash Slot
+23. Redis主从复制原理及无磁盘复制分析
 
-33. Redis使用常见问题及性能优化思路
+24. Redis管道模式详解
 
-34. Redis高可用及高伸缩架构实战
+25. Redis缓存与数据库一致性问题解决方案
 
-35. 缓存击穿，缓存雪崩预防策略
+26. 基于Redis实现分布式锁实战
 
-36. Redis批量查询优化
+27. 图解Redis中的AOF和RDB持久化策略的原理
 
-37. Redis高性能集群之Twemproxy  or  codis
+28. Redis读写分离架构实践
+
+29. Redis哨兵架构及数据丢失问题分析
+
+30. Redis  luster数据分布算法之 Hash Slot
+
+31. Redis使用常见问题及性能优化思路
+
+32. Redis高可用及高伸缩架构实战
+
+33. 缓存击穿，缓存雪崩预防策略
+
+34. Redis批量查询优化
+
+35. Redis高性能集群之Twemproxy  or  codis
 
 
 
