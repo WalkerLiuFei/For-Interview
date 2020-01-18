@@ -1,0 +1,30 @@
+## Image 开发
+
+## 参考
+
+[DockerFile 参考手册](https://docs.docker.com/engine/reference/builder/ ) 
+
+## 从一个简单的例子说起
+
+```dockerfile
+FROM node:6.11.5    
+
+WORKDIR /usr/src/app
+COPY package.json .
+RUN npm install    
+COPY . .
+
+CMD [ "npm", "start" ]    
+```
+
+1. `FROM` :  Pre-existing image, 含义为基于此image进行的开发
+2. `WORKERDIR` : 指明app运行的目录
+3. `COPY` : 的第一个参数的目录是当前运行的目录，第二个参数是`WORKDIR`
+4. `RUN` : 指的是运行在dockers image内的命令，并非 host 系统命令
+
+
+
+## Build smallest docker Image 
+
+[build smalled docker image]( https://medium.com/@chemidy/create-the-smallest-and-secured-golang-docker-image-based-on-scratch-4752223b7324 )
+
