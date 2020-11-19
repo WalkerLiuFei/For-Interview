@@ -2,7 +2,7 @@
 
 ## FastHttp中的技巧
 
-1. 复用Gorutine
+1. 复用Goroutine
 2. fasthttp避免绝大部分多余的内存分配行为，能复用绝不分配。
 3. 善用sync.Pool。
 4. 尽量避免[]byte与string之间转换带来的开销。
